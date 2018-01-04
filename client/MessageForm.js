@@ -1,27 +1,38 @@
 import React from 'react';
-import styles from './MessageList.css';
+import styles from './MessageForm.css';
 
-const Message = props => (
-    <div className={styles.Message}>
-        <strong>{props.from} :</strong>
-        <span>{props.text}</span>
-    </div>
-);
-
-const MessageList = props => (
-    <div className={styles.MessageList}>
-        {
-            props.messages.map((message, i) => {
-                return (
-                    <Message 
-                        key={i}
-                        from={message.from}
-                        text={message.text}
-                    />
-                );
-            })
-        }
-    </div>    
-);
-
-export default MessageList;
+class MessageForm extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {text: ''};
+    }
+  
+    handleSubmit(e) {
+      e.preventDefault();
+      const message = {
+        from : this.props.name,
+        text : this.state.text
+      };
+      this.props.onMessageSubmit(message);
+      this.setState({ text: '' });
+    }
+  
+    changeHandler(e) {
+      this.setState({ text : e.target.value });
+    }
+  
+    render() {
+      return(
+        <form className={styles.MessageForm} onSubmit={e => this.handleSubmit(e)}>
+          <input
+            className={styles.MessageInput}
+            onChange={e => this.changeHandler(e)}
+            value={this.state.text}
+            placeholder='Message'
+          />
+        </form>
+      );
+    }
+  }
+  
+  export default MessageForm;
